@@ -1,6 +1,5 @@
 const getData = "SELECT * FROM parseddata";
 const getDataById = "SELECT * FROM parseddata WHERE id = $1";
-
 const checkDataExists = "SELECT s FROM parseddata s WHERE s.inflation = $1";
 const addData = "INSERT INTO parseddata (inflation, brent) VALUES ($1, $2)";
 const deleteData = "DELETE FROM parseddata WHERE id = $1"
