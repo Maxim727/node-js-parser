@@ -1,6 +1,5 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-
 // in case need to write in json
 // const pretty = require("pretty");
 // const fs = require("fs");
@@ -8,6 +7,12 @@ const cheerio = require("cheerio");
 // URL of the page we want to scrape
 const nationalbank = "https://nationalbank.kz/ru";
 const investing = "https://markets.businessinsider.com/commodities/oil-price";
+
+let dataBODY = {
+  inflation: '8.7%',
+  brent: '9.75%',
+  baserate: '71.63'
+}
 
 // Async function which scrapes the data
 async function nbValue() {
@@ -20,13 +25,11 @@ async function nbValue() {
     const percent = $(".intro-board__title")
     const base = $(".link-white")
 
-    
-    const inflation = percent.html()
-    const baseRate = base.html()
-    
-    console.log(inflation)
-    console.log(baseRate)
+    dataBODY.inflation = percent.html()
+    dataBODY.baserate = base.html()
 
+    // console.log(dataBODY.inflation)
+    // console.log(dataBODY.baserate)
 
   } catch (err) {
     console.error(err);
@@ -42,19 +45,30 @@ async function brentValue() {
     const $ = cheerio.load(data);
     // Select all the list items in plainlist class
     const percent = $(".price-section__current-value")
-    const brent =  percent.html();
 
-    console.log(brent)
+    dataBODY.brent = percent.html();
+
+    //console.log(dataBODY.brent)
 
   } catch (err) {
     console.error(err);
   }
-} 
-
+}
 
 // Updating once in 24hrs
-setInterval(function(){ nbValue()}, 1000 * 60 * 60 * 24)
+setInterval(function () { nbValue() }, 1000 * 60 * 60 * 24)
 
 // Updating every 15 minutes
-setInterval(function(){ brentValue()},900000)
+setInterval(function () { brentValue() }, 900000) 
+
+//Updating the values in DB
+setInterval(function() { 
+  axios.put('http://localhost:3000/api/v1/data/1', dataBODY)
+  .then((res) => {
+      // console.log(`Status: ${res.status}`);
+      // console.log('Body: ', res.data);
+  }).catch((err) => {
+      console.error(err);
+  });
+}, 1000)
 

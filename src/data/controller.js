@@ -19,7 +19,7 @@ const getDataById = (req, res) => {
 }
 
 const addData = (req, res) => {
-    const {id, inflation, brent} = req.body;
+    const {id, inflation, brent, baserate} = req.body;
 
     // checking if data exists
     pool.query(queries.checkDataExists, [inflation], (error, results) => {
@@ -28,7 +28,7 @@ const addData = (req, res) => {
         }
     })
     // add data to db
-    pool.query(queries.addData, [inflation, brent], (error, results) => {
+    pool.query(queries.addData, [inflation, brent, baserate], (error, results) => {
         if(error) throw error;
         res.status(201).send("DATA created successfully")
 
@@ -58,7 +58,8 @@ const deleteData = (req, res) => {
 const updateData = (req, res) => {
     const id = parseInt(req.params.id);
 
-    const { inflation ,brent } = req.body
+    const { inflation ,brent, baserate } = req.body
+
 
     pool.query(queries.getDataById, [id], (error, results) => {
         const noDataFound = !results.rows.length;
@@ -66,7 +67,7 @@ const updateData = (req, res) => {
             res.send("DATA does not exist in the DB, nothing to update")
         }
 
-        pool.query(queries.updateData, [inflation, brent, id], (error, results) => {
+        pool.query(queries.updateData, [inflation, brent, baserate, id], (error, results) => {
             if(error) throw error;
             res.status(200).send("DATA updated successfully")
         })
