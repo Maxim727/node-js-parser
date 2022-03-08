@@ -22,11 +22,11 @@ const addData = (req, res) => {
     const {id, inflation, brent, baserate} = req.body;
 
     // checking if data exists
-    pool.query(queries.checkDataExists, [inflation], (error, results) => {
-        if(results.rows.length){
-            res.send('DATA already exists')
-        }
-    })
+   // pool.query(queries.checkDataExists, [inflation], (error, results) => {
+    //    if(results.rows.length){
+    //        res.send('DATA already exists')
+    //    }
+    //})
     // add data to db
     pool.query(queries.addData, [inflation, brent, baserate], (error, results) => {
         if(error) throw error;
@@ -39,12 +39,12 @@ const deleteData = (req, res) => {
     const id = parseInt(req.params.id);
 
     pool.query(queries.getDataById, [id], (error,results) => {
-        if(error) throw error;
+       if(error) throw error;
 
-        const noDataFound = !results.rows.length;
-        if(noDataFound){
-            res.send("DATA does not exist in the DB")
-        }
+        // const noDataFound = !results.rows.length;
+        // if(noDataFound){
+        //    res.send("DATA does not exist in the DB")
+        // }
 
         pool.query(queries.deleteData, [id], (error, results) => {
             if(error) throw error;
@@ -61,11 +61,11 @@ const updateData = (req, res) => {
     const { inflation ,brent, baserate } = req.body
 
 
-    pool.query(queries.getDataById, [id], (error, results) => {
-        const noDataFound = !results.rows.length;
-        if(noDataFound){
-            res.send("DATA does not exist in the DB, nothing to update")
-        }
+   pool.query(queries.getDataById, [id], (error, results) => {
+    //    const noDataFound = !results.rows.length;
+    //    if(noDataFound){
+    //        res.send("DATA does not exist in the DB, nothing to update")
+    //    }
 
         pool.query(queries.updateData, [inflation, brent, baserate, id], (error, results) => {
             if(error) throw error;

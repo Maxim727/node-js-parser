@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node parser.js & node server.js",
+    "server": "node server.js",
+    "parser": "node parser.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,6 +14,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "cheerio": "^1.0.0-rc.10",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "pg": "^8.7.1",
     "pretty": "^2.0.0"
